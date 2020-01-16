@@ -5,22 +5,11 @@ public class Quote {
     String text;
 
 
-
     @Override
     public String toString() {
-        return "Author" + author + ", text=" + text;
+        return "Author: " + author + ", the quote: " + text;
     }
 
 }
 
 
-
-//[
-//        {
-//        "tags": [
-//        "attributed-no-source"
-//        ],
-//        "author": "Marilyn Monroe",
-//        "likes": "18651 likes",
-//        "text": " “I am good, but not an angel. I do sin, but I am not the devil. I am just a small girl in a big world trying to find someone to love.” "
-//        },

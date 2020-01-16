@@ -7,43 +7,35 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
+
 import com.google.gson.Gson;
 
 
 public class App {
-    public String getGreeting() {
-        return "Hello world.";
-    }
 
     public static void main(String[] args) {
         Gson gson = new Gson();
 
         String path = "src/main/resources/quotes.json";
 
-//        Quote[] quoteArray = gson.fromJson(path, Quote[].class);
-//
-//        for (Quote quote : quoteArray) {
-//            System.out.println(quote);
-
-
         try {
-
 
             Scanner scanner = new Scanner(new File(path));
             String firstLine = scanner.nextLine();
 
-            while(scanner.hasNext()){
+            while (scanner.hasNext()) {
                 firstLine += scanner.nextLine();
             }
 
             Quote[] quote1 = gson.fromJson(firstLine, Quote[].class);
+            int randomNumber = ((int) (Math.random() * quote1.length) + 1);
+
 //            System.out.println(Arrays.toString(quote1));
-            System.out.println(quote1[0]);
+            System.out.println(quote1[randomNumber]);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
 
-
-        }
     }
+}
