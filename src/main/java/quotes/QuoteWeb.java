@@ -1,6 +1,6 @@
 package quotes;
 
-public class QuoteWeb extends Quote {
+public class QuoteWeb {
 
     String quoteAuthor;
     String quoteText;
@@ -8,7 +8,7 @@ public class QuoteWeb extends Quote {
 
     @Override
     public String toString() {
-        return "Author: " + quoteAuthor + ", the quote: " + quoteText;
+        return " Author: " + quoteAuthor + ", the quote: " + quoteText;
     }
 
 }

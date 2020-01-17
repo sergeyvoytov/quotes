@@ -15,13 +15,7 @@ public class App {
 
     public static void main(String[] args) throws IOException {
 
-        String path = "src/main/resources/quotes.json";
-
-//        String firstLine = readingFile(path);
-
-//        showRandomQuote(firstLine);
-
-        goOnInternet();
+        goOnInterNetOrLocal();
 
     }
 
@@ -66,12 +60,7 @@ public class App {
 
         BufferedReader input = new BufferedReader(new InputStreamReader(numConnection.getInputStream()));
 
-
-        System.out.println("input" + input);
-
-
         StringBuilder buildy = new StringBuilder();
-
 
         String firstLine = input.readLine();
         while (firstLine != null) {
@@ -79,16 +68,49 @@ public class App {
             firstLine = input.readLine();
         }
 
-
-        String buildy3 = String.valueOf(buildy);
-
-       QuoteWeb buildy2 = gson.fromJson(buildy3, QuoteWeb.class);
-
-
-        System.out.println(buildy2);
-        return buildy.toString();
-
+        String buildString = String.valueOf(buildy);
+        QuoteWeb quoteFromWeb = gson.fromJson(buildString, QuoteWeb.class);
+        addQuoteToJason(quoteFromWeb.toString());
+        System.out.println(quoteFromWeb);
+        return quoteFromWeb.toString();
     }
+
+
+    public static void goOnInterNetOrLocal() {
+        try {
+            goOnInternet();
+        } catch (IOException e) {
+
+            String path = "src/main/resources/quotes.json";
+
+            String firstLine = readingFile(path);
+            showRandomQuote(firstLine);
+        }
+    }
+
+    public static void addQuoteToJason (String quote){
+        Gson gson = new Gson();
+
+        String makeJson = gson.toJson(quote);
+
+
+        FileWriter myWriter;
+
+
+        try {
+            myWriter = new FileWriter("src/main/resources/Newquotes.json");
+            gson.toJson(quote, myWriter);
+//            System.out.println((gson.toJson(quote, myWriter)));
+            // analagous to save
+            myWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("File not found");
+        }
+    }
+
+
 
 
 }
