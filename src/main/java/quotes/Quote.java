@@ -1,5 +1,7 @@
 package quotes;
 
+import com.google.gson.Gson;
+
 public class Quote {
     String author;
     String text;

@@ -3,12 +3,39 @@
  */
 package quotes;
 
+import com.google.gson.Gson;
 import org.junit.Test;
+
+import java.sql.Array;
+
 import static org.junit.Assert.*;
 
 public class AppTest {
-    @Test public void testAppHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+
+    // test file read
+    @Test
+    public void readingFileTest() {
+        String firstLine = App.readingFile("src/test/resources/test.json");
+        String expected = "[  {    \"author\": \"Marilyn Monroe\",    \"likes\": \"18651 likes\",  },  {    \"author\": \"Charles Dickens\",    \"likes\": \"497 likes\",  }]";
+        assertEquals(expected, firstLine);
+
+    }
+
+    //tests if file is empty what is happening
+    @Test
+    public void noFileTest() {
+        String firstLine = App.readingFile("");
+        String expected = "File is not found";
+        assertEquals(expected, firstLine);
+    }
+
+    //test if the app randomly return the quote
+    @Test
+    public void randomQuoteTest() {
+        String firstLine = App.readingFile("src/main/resources/quotes.json");
+        String randomQuote = App.showRandomQuote(firstLine);
+        System.out.println(randomQuote);
+
+        assertNotNull(randomQuote);
     }
 }

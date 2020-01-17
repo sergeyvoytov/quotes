@@ -10,32 +10,45 @@ import java.util.Scanner;
 
 import com.google.gson.Gson;
 
-
 public class App {
 
     public static void main(String[] args) {
-        Gson gson = new Gson();
 
         String path = "src/main/resources/quotes.json";
 
+        String firstLine = readingFile(path);
+
+        showRandomQuote(firstLine);
+
+    }
+
+    public static String readingFile(String path) {
+        Scanner scanner = null;
         try {
-
-            Scanner scanner = new Scanner(new File(path));
-            String firstLine = scanner.nextLine();
-
-            while (scanner.hasNext()) {
-                firstLine += scanner.nextLine();
-            }
-
-            Quote[] quote1 = gson.fromJson(firstLine, Quote[].class);
-            int randomNumber = ((int) (Math.random() * quote1.length) + 1);
-
-//            System.out.println(Arrays.toString(quote1));
-            System.out.println(quote1[randomNumber]);
-
+            scanner = new Scanner(new File(path));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return "File is not found";
         }
+        String firstLine = scanner.nextLine();
 
+        while (scanner.hasNext()) {
+            firstLine += scanner.nextLine();
+        }
+//        System.out.println(firstLine);
+
+        return firstLine;
+
+    }
+
+    public static String showRandomQuote(String firstLine) {
+        Gson gson = new Gson();
+
+        Quote[] quote1 = gson.fromJson(firstLine, Quote[].class);
+        int randomNumber = ((int) (Math.random() * quote1.length) + 1);
+
+        String result = String.valueOf(quote1[randomNumber]);
+        System.out.println(result);
+
+        return result;
     }
 }
