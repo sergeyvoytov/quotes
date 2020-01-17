@@ -3,8 +3,9 @@
  */
 package quotes;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Scanner;
 
@@ -12,13 +13,15 @@ import com.google.gson.Gson;
 
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         String path = "src/main/resources/quotes.json";
 
-        String firstLine = readingFile(path);
+//        String firstLine = readingFile(path);
 
-        showRandomQuote(firstLine);
+//        showRandomQuote(firstLine);
+
+        goOnInternet();
 
     }
 
@@ -34,7 +37,7 @@ public class App {
         while (scanner.hasNext()) {
             firstLine += scanner.nextLine();
         }
-//        System.out.println(firstLine);
+//  System.out.println(firstLine);
 
         return firstLine;
 
@@ -51,4 +54,41 @@ public class App {
 
         return result;
     }
+
+
+    public static String goOnInternet() throws IOException {
+
+        Gson gson = new Gson();
+
+        URL url = new URL("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en");
+        HttpURLConnection numConnection = (HttpURLConnection) url.openConnection();
+        numConnection.setRequestMethod("GET");
+
+        BufferedReader input = new BufferedReader(new InputStreamReader(numConnection.getInputStream()));
+
+
+        System.out.println("input" + input);
+
+
+        StringBuilder buildy = new StringBuilder();
+
+
+        String firstLine = input.readLine();
+        while (firstLine != null) {
+            buildy.append(firstLine);
+            firstLine = input.readLine();
+        }
+
+
+        String buildy3 = String.valueOf(buildy);
+
+       QuoteWeb buildy2 = gson.fromJson(buildy3, QuoteWeb.class);
+
+
+        System.out.println(buildy2);
+        return buildy.toString();
+
+    }
+
+
 }
