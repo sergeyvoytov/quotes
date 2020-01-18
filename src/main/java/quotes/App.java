@@ -3,37 +3,39 @@
  */
 package quotes;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Scanner;
-
-import com.google.gson.Gson;
 
 public class App {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         goOnInterNetOrLocal();
 
     }
 
     public static String readingFile(String path) {
-        Scanner scanner = null;
+        Scanner scanner;
         try {
             scanner = new Scanner(new File(path));
         } catch (FileNotFoundException e) {
             return "File is not found";
         }
-        String firstLine = scanner.nextLine();
+        StringBuilder firstLine = new StringBuilder(scanner.nextLine());
 
         while (scanner.hasNext()) {
-            firstLine += scanner.nextLine();
+            firstLine.append(scanner.nextLine());
         }
-//  System.out.println(firstLine);
+        System.out.println("4444444" + firstLine);
 
-        return firstLine;
+        return firstLine.toString();
 
     }
 
@@ -41,10 +43,11 @@ public class App {
         Gson gson = new Gson();
 
         Quote[] quote1 = gson.fromJson(firstLine, Quote[].class);
+        System.out.println("quote1 = " + quote1[0]);
         int randomNumber = ((int) (Math.random() * quote1.length) + 1);
 
         String result = String.valueOf(quote1[randomNumber]);
-        System.out.println(result);
+//      System.out.println(result);
 
         return result;
     }
@@ -54,7 +57,7 @@ public class App {
 
         Gson gson = new Gson();
 
-        URL url = new URL("http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en");
+        URL url = new URL("http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote");
         HttpURLConnection numConnection = (HttpURLConnection) url.openConnection();
         numConnection.setRequestMethod("GET");
 
@@ -70,8 +73,9 @@ public class App {
 
         String buildString = String.valueOf(buildy);
         QuoteWeb quoteFromWeb = gson.fromJson(buildString, QuoteWeb.class);
-        addQuoteToJason(quoteFromWeb.toString());
-        System.out.println(quoteFromWeb);
+//        System.out.println("11111" + quoteFromWeb);
+
+        addQuoteToJason(quoteFromWeb);
         return quoteFromWeb.toString();
     }
 
@@ -80,28 +84,29 @@ public class App {
         try {
             goOnInternet();
         } catch (IOException e) {
-
             String path = "src/main/resources/quotes.json";
-
             String firstLine = readingFile(path);
             showRandomQuote(firstLine);
+            System.out.println("showRandomQuote(firstLine) = " + showRandomQuote(firstLine));
         }
     }
 
-    public static void addQuoteToJason (String quote){
-        Gson gson = new Gson();
-
-        String makeJson = gson.toJson(quote);
-
-
-        FileWriter myWriter;
-
+    public static void addQuoteToJason(QuoteWeb quote) {
 
         try {
-            myWriter = new FileWriter("src/main/resources/Newquotes.json");
-            gson.toJson(quote, myWriter);
-//            System.out.println((gson.toJson(quote, myWriter)));
-            // analagous to save
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+            String path = "src/main/resources/NewQuotes.json";
+            String firstLine = readingFile(path);
+            System.out.println("firstLine = " + firstLine);
+            BufferedWriter myWriter = new BufferedWriter(new FileWriter("src/main/resources/NewQuotes.json"));
+
+            TypeToken<ArrayList<QuoteWeb>> token = new TypeToken<ArrayList<QuoteWeb>>() {};
+            ArrayList<QuoteWeb> newQuote = gson.fromJson(firstLine, token.getType());
+            newQuote.add(quote);
+
+            gson.toJson(newQuote, myWriter);
+
             myWriter.close();
 
         } catch (IOException e) {
@@ -109,8 +114,6 @@ public class App {
             System.out.println("File not found");
         }
     }
-
-
 
 
 }
