@@ -2,13 +2,18 @@ package quotes;
 
 public class QuoteWeb {
 
-    String quoteAuthor;
-    String quoteText;
+    int id;
+    String starWarsQuote;
 
+
+    public QuoteWeb(int id, String starWarsQuote) {
+        this.id = id;
+        this.starWarsQuote = starWarsQuote;
+    }
 
     @Override
     public String toString() {
-        return " Author: " + quoteAuthor + ", the quote: " + quoteText;
+        return " Author: " + id + ", the quote: " + starWarsQuote;
     }
 
 }
