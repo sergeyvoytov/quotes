@@ -6,7 +6,10 @@ package quotes;
 import com.google.gson.Gson;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Array;
+import java.util.Scanner;
 
 import static org.junit.Assert.*;
 
@@ -37,5 +40,24 @@ public class AppTest {
         System.out.println(randomQuote);
 
         assertNotNull(randomQuote);
+    }
+
+    @Test
+    public void addQuoteToJsonTest() throws FileNotFoundException {
+        QuoteWeb quote = new QuoteWeb(1, "Johnny Johnny yes papa");
+        String path = "src/test/resources/newQuotesTest.json";
+        App.addQuoteToJason(quote, path);
+
+        Scanner scanner = new Scanner(new File(path));
+        boolean expected = true;
+        while (scanner.hasNextLine()) {
+            if(scanner.nextLine().contains(quote.starWarsQuote)) {
+                expected = true;
+                break;
+            } else {
+                expected = false;
+            }
+        }
+        assertTrue(expected);
     }
 }
