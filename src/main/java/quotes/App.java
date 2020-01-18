@@ -15,10 +15,9 @@ import java.util.Scanner;
 
 public class App {
 
-    public static void main(String[] args) {
-
-        goOnInterNetOrLocal();
-
+    public static void main(String[] args) throws IOException {
+        String path = "src/main/resources/quotes.json";
+        goOnInterNetOrLocal(path);
     }
 
     public static String readingFile(String path) {
@@ -33,7 +32,7 @@ public class App {
         while (scanner.hasNext()) {
             firstLine.append(scanner.nextLine());
         }
-        System.out.println("4444444" + firstLine);
+//        System.out.println("4444444" + firstLine);
 
         return firstLine.toString();
 
@@ -53,8 +52,7 @@ public class App {
     }
 
 
-    public static String goOnInternet() throws IOException {
-
+    public static QuoteWeb goOnInternet() throws IOException {
         Gson gson = new Gson();
 
         URL url = new URL("http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote");
@@ -62,7 +60,7 @@ public class App {
         numConnection.setRequestMethod("GET");
 
         BufferedReader input = new BufferedReader(new InputStreamReader(numConnection.getInputStream()));
-
+//        System.out.println("input = " + input);
         StringBuilder buildy = new StringBuilder();
 
         String firstLine = input.readLine();
@@ -73,16 +71,17 @@ public class App {
 
         String buildString = String.valueOf(buildy);
         QuoteWeb quoteFromWeb = gson.fromJson(buildString, QuoteWeb.class);
-//        System.out.println("11111" + quoteFromWeb);
+        System.out.print("11111" + quoteFromWeb.starWarsQuote);
 
-        addQuoteToJason(quoteFromWeb);
-        return quoteFromWeb.toString();
+        return quoteFromWeb;
     }
 
 
-    public static void goOnInterNetOrLocal() {
+    public static void goOnInterNetOrLocal(String filePath) {
         try {
-            goOnInternet();
+            QuoteWeb quote = goOnInternet();
+            addQuoteToJason(quote,filePath);
+
         } catch (IOException e) {
             String path = "src/main/resources/quotes.json";
             String firstLine = readingFile(path);
@@ -91,15 +90,15 @@ public class App {
         }
     }
 
-    public static void addQuoteToJason(QuoteWeb quote) {
+    public static void addQuoteToJason(QuoteWeb quote, String filePath) {
 
         try {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-            String path = "src/main/resources/NewQuotes.json";
+            String path = filePath;
             String firstLine = readingFile(path);
-            System.out.println("firstLine = " + firstLine);
-            BufferedWriter myWriter = new BufferedWriter(new FileWriter("src/main/resources/NewQuotes.json"));
+//            System.out.println("firstLine = " + firstLine);
+            BufferedWriter myWriter = new BufferedWriter(new FileWriter(filePath));
 
             TypeToken<ArrayList<QuoteWeb>> token = new TypeToken<ArrayList<QuoteWeb>>() {};
             ArrayList<QuoteWeb> newQuote = gson.fromJson(firstLine, token.getType());
