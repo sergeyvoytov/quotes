@@ -16,8 +16,7 @@ import java.util.Scanner;
 public class App {
 
     public static void main(String[] args) throws IOException {
-        String path = "src/main/resources/quotes.json";
-        goOnInterNetOrLocal(path);
+        goOnInterNetOrLocal();
     }
 
     public static String readingFile(String path) {
@@ -42,12 +41,10 @@ public class App {
         Gson gson = new Gson();
 
         Quote[] quote1 = gson.fromJson(firstLine, Quote[].class);
-        System.out.println("quote1 = " + quote1[0]);
-        int randomNumber = ((int) (Math.random() * quote1.length) + 1);
-
+        int randomNumber = ((int) (Math.random() * (quote1.length -1)));
+        System.out.println("randomNumber = " + randomNumber);;
         String result = String.valueOf(quote1[randomNumber]);
-//      System.out.println(result);
-
+        System.out.println("result = " + result);
         return result;
     }
 
@@ -76,20 +73,6 @@ public class App {
         return quoteFromWeb;
     }
 
-
-    public static void goOnInterNetOrLocal(String filePath) {
-        try {
-            QuoteWeb quote = goOnInternet();
-            addQuoteToJason(quote,filePath);
-
-        } catch (IOException e) {
-            String path = "src/main/resources/quotes.json";
-            String firstLine = readingFile(path);
-            showRandomQuote(firstLine);
-            System.out.println("showRandomQuote(firstLine) = " + showRandomQuote(firstLine));
-        }
-    }
-
     public static void addQuoteToJason(QuoteWeb quote, String filePath) {
 
         try {
@@ -115,4 +98,16 @@ public class App {
     }
 
 
+    public static void goOnInterNetOrLocal() {
+        try {
+            QuoteWeb quote = goOnInternet();
+            addQuoteToJason(quote,"src/main/resources/NewQuotes.json");
+
+        } catch (IOException e) {
+            String path = "src/main/resources/quotes.json";
+            String firstLine = readingFile(path);
+            showRandomQuote(firstLine);
+            System.out.println("showRandomQuote(firstLine) = " + showRandomQuote(firstLine));
+        }
+    }
 }
