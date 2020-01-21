@@ -40,13 +40,11 @@ public class App {
     public static String showRandomQuote(String firstLine) {
         Gson gson = new Gson();
 
-        QuoteWeb[] quote1 = gson.fromJson(firstLine, QuoteWeb[].class);
-        System.out.println("quote1 = " + quote1[0]);
-        int randomNumber = ((int) (Math.random() * (quote1.length -1) + 1));
-
+        Quote[] quote1 = gson.fromJson(firstLine, Quote[].class);
+        int randomNumber = ((int) (Math.random() * (quote1.length -1)));
+        System.out.println("randomNumber = " + randomNumber);;
         String result = String.valueOf(quote1[randomNumber]);
-//      System.out.println(result);
-
+        System.out.println("result = " + result);
         return result;
     }
 
@@ -106,7 +104,7 @@ public class App {
             addQuoteToJason(quote,"src/main/resources/NewQuotes.json");
 
         } catch (IOException e) {
-            String path = "src/main/resources/NewQuotes.json";
+            String path = "src/main/resources/quotes.json";
             String firstLine = readingFile(path);
             showRandomQuote(firstLine);
             System.out.println("showRandomQuote(firstLine) = " + showRandomQuote(firstLine));

@@ -5,9 +5,6 @@ import com.google.gson.Gson;
 public class Quote {
     String author;
     String text;
-    int id;
-    String starWarsQuote;
-
 
     public Quote(String author, String text) {
         this.author = author;
